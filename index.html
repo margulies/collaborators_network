@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+   <script type="text/javascript" src="d3.v3.min.js"></script>
+	 <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<h4>Drag a circle to lock its position. <br/> Hover the cursor over a circle to display the link names.</h4> 
+
+	<script type="text/javascript">
+	var textPathShow = true;
+	var links = [{idn: "1", source: "Jonny Smallwood", target: "Chris Gorgolewski", type: "Scientific_Papers", label: "Baird et al (2013)"},
+  {idn: "2", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Scientific_Papers", label: "Baird et al (2013)"},
+  {idn: "3", source: "Chris Gorgolewski", target: "Daniel Margulies", type: "Scientific_Papers", label: "Baird et al (2013)"},
+  {idn: "4", source: "Jonny Smallwood", target: "Felicity  Callard", type: "Scientific_Papers", label: "Callard et al (2012)"},
+  {idn: "5", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Scientific_Papers", label: "Callard et al (2012)"},
+  {idn: "6", source: "Felicity  Callard", target: "Daniel Margulies", type: "Scientific_Papers", label: "Callard et al (2012)"},
+  {idn: "7", source: "Lynne Friedli", target: "Felicity  Callard", type: "Scientific_Papers", label: "Callard & Friedli (2005)"},
+  {idn: "8", source: "Jonny Smallwood", target: "Chris Gorgolewski", type: "Scientific_Papers", label: "Smallwood et al (2013)"},
+  {idn: "9", source: "Jonny Smallwood", target: "Hannes Golchert", type: "Scientific_Papers", label: "Smallwood et al (2013)"},
+  {idn: "10", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Scientific_Papers", label: "Smallwood et al (2013)"},
+  {idn: "11", source: "Chris Gorgolewski", target: "Hannes Golchert", type: "Scientific_Papers", label: "Smallwood et al (2013)"},
+  {idn: "12", source: "Chris Gorgolewski", target: "Daniel Margulies", type: "Scientific_Papers", label: "Smallwood et al (2013)"},
+  {idn: "13", source: "Hannes Golchert", target: "Daniel Margulies", type: "Scientific_Papers", label: "Smallwood et al (2013)"},
+  {idn: "14", source: "Jonny Smallwood", target: "Chris Gorgolewski", type: "Scientific_Papers", label: "PlosONE (submission)"},
+  {idn: "15", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Scientific_Papers", label: "PlosONE (submission)"},
+  {idn: "16", source: "Chris Gorgolewski", target: "Daniel Margulies", type: "Scientific_Papers", label: "PlosONE (submission)"},
+  {idn: "17", source: "Hilary Powell", target: "Benjamin Alderson-Day", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "18", source: "Hilary Powell", target: "Vaughan Bell", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "19", source: "Hilary Powell", target: "Angela Woods", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "20", source: "Hilary Powell", target: "Felicity  Callard", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "21", source: "Hilary Powell", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "22", source: "Benjamin Alderson-Day", target: "Vaughan Bell", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "23", source: "Benjamin Alderson-Day", target: "Angela Woods", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "24", source: "Benjamin Alderson-Day", target: "Felicity  Callard", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "25", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "26", source: "Vaughan Bell", target: "Angela Woods", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "27", source: "Vaughan Bell", target: "Felicity  Callard", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "28", source: "Vaughan Bell", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "29", source: "Angela Woods", target: "Felicity  Callard", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "30", source: "Angela Woods", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "31", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Woods et al (to be published)"},
+  {idn: "32", source: "Vaughan Bell", target: "Angela Woods", type: "Scientific_Papers", label: "Laroi et al (to be published)"},
+  {idn: "33", source: "Jennifer Laws", target: "Angela Woods", type: "Scientific_Papers", label: "Whitehead & Woods 2015"},
+  {idn: "34", source: "Jennifer Laws", target: "Felicity  Callard", type: "Scientific_Papers", label: "Whitehead & Woods 2015"},
+  {idn: "35", source: "Angela Woods", target: "Felicity  Callard", type: "Scientific_Papers", label: "Whitehead & Woods 2015"},
+  {idn: "36", source: "Angela Woods", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Waters et al (in press)"},
+  {idn: "37", source: "Hilary Powell", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Powell et al (2013)"},
+  {idn: "38", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Fernyhough & Anderson-Day (in preparation)"},
+  {idn: "39", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Anderson-Day et al (submitted)"},
+  {idn: "40", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Kuhn et al (in preparation)"},
+  {idn: "41", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Scientific_Papers", label: "Fitzgerald & Callard (under review)"},
+  {idn: "42", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Scientific_Papers", label: "Fitzgerald & Callard monography (under contract)"},
+  {idn: "43", source: "Benjamin Alderson-Day", target: "Felicity  Callard", type: "Scientific_Papers", label: "Alderson-Day et al (to be submitted)"},
+  {idn: "44", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Alderson-Day et al (to be submitted)"},
+  {idn: "45", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Scientific_Papers", label: "Alderson-Day et al (to be submitted)"},
+  {idn: "46", source: "Des Fitzgerald", target: "Angela Woods", type: "Scientific_Papers", label: "Woods et al (book chapter)"},
+  {idn: "47", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Scientific_Papers", label: "Woods et al (book chapter)"},
+  {idn: "48", source: "Angela Woods", target: "Felicity  Callard", type: "Scientific_Papers", label: "Woods et al (book chapter)"},
+  {idn: "49", source: "Angela Woods", target: "Felicity  Callard", type: "Scientific_Papers", label: "Co-edit Critical Medical Humanities"},
+  {idn: "50", source: "Joceline Howe", target: "Felicity  Callard", type: "Scientific_Papers", label: "Editors Journal of Public Mental Health"},
+  {idn: "51", source: "Jonny Smallwood", target: "Josh Berson", type: "Workshops_related", label: "Brainhack 2012"},
+  {idn: "52", source: "Jonny Smallwood", target: "Tal Yarkoni", type: "Workshops_related", label: "Brainhack 2012"},
+  {idn: "53", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Workshops_related", label: "Brainhack 2012"},
+  {idn: "54", source: "Josh Berson", target: "Tal Yarkoni", type: "Workshops_related", label: "Brainhack 2012"},
+  {idn: "55", source: "Josh Berson", target: "Daniel Margulies", type: "Workshops_related", label: "Brainhack 2012"},
+  {idn: "56", source: "Tal Yarkoni", target: "Daniel Margulies", type: "Workshops_related", label: "Brainhack 2012"},
+  {idn: "57", source: "Emma Bennett", target: "Holly Pester", type: "Workshops_related", label: "The Voice 2012"},
+  {idn: "58", source: "Emma Bennett", target: "Antonia Barnett-McIntosh", type: "Workshops_related", label: "The Voice 2012"},
+  {idn: "59", source: "Emma Bennett", target: "James Wilkes", type: "Workshops_related", label: "The Voice 2012"},
+  {idn: "60", source: "Holly Pester", target: "Antonia Barnett-McIntosh", type: "Workshops_related", label: "The Voice 2012"},
+  {idn: "61", source: "Holly Pester", target: "James Wilkes", type: "Workshops_related", label: "The Voice 2012"},
+  {idn: "62", source: "Antonia Barnett-McIntosh", target: "James Wilkes", type: "Workshops_related", label: "The Voice 2012"},
+  {idn: "63", source: "Steven Fowler", target: "Holly Pester", type: "Workshops_related", label: "Family 2013"},
+  {idn: "64", source: "Steven Fowler", target: "Antonia Barnett-McIntosh", type: "Workshops_related", label: "Family 2013"},
+  {idn: "65", source: "Holly Pester", target: "Antonia Barnett-McIntosh", type: "Workshops_related", label: "Family 2013"},
+  {idn: "66", source: "Jonny Smallwood", target: "Chris Gorgolewski", type: "Workshops_related", label: " Resting State"},
+  {idn: "67", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Workshops_related", label: " Resting State"},
+  {idn: "68", source: "Chris Gorgolewski", target: "Daniel Margulies", type: "Workshops_related", label: " Resting State"},
+  {idn: "69", source: "Angela Woods", target: "Felicity  Callard", type: "Workshops_related", label: "Hearing the Voice 2011"},
+  {idn: "70", source: "Angela Woods", target: "Charles Fernyhough", type: "Workshops_related", label: "Hearing the Voice 2011"},
+  {idn: "71", source: "Angela Woods", target: "James Wilkes", type: "Workshops_related", label: "Hearing the Voice 2011"},
+  {idn: "72", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Workshops_related", label: "Hearing the Voice 2011"},
+  {idn: "73", source: "Felicity  Callard", target: "James Wilkes", type: "Workshops_related", label: "Hearing the Voice 2011"},
+  {idn: "74", source: "Charles Fernyhough", target: "James Wilkes", type: "Workshops_related", label: "Hearing the Voice 2011"},
+  {idn: "75", source: "Hilary Powell", target: "Angela Woods", type: "Workshops_related", label: "Hearing the Voice 2013"},
+  {idn: "76", source: "Des Fitzgerald", target: "Jonny Smallwood", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "77", source: "Des Fitzgerald", target: "Angela Woods", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "78", source: "Des Fitzgerald", target: "Sabine Arnaud", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "79", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "80", source: "Des Fitzgerald", target: "Charles Fernyhough", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "81", source: "Des Fitzgerald", target: "Daniel Margulies", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "82", source: "Jonny Smallwood", target: "Angela Woods", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "83", source: "Jonny Smallwood", target: "Sabine Arnaud", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "84", source: "Jonny Smallwood", target: "Felicity  Callard", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "85", source: "Jonny Smallwood", target: "Charles Fernyhough", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "86", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "87", source: "Angela Woods", target: "Sabine Arnaud", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "88", source: "Angela Woods", target: "Felicity  Callard", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "89", source: "Angela Woods", target: "Charles Fernyhough", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "90", source: "Angela Woods", target: "Daniel Margulies", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "91", source: "Sabine Arnaud", target: "Felicity  Callard", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "92", source: "Sabine Arnaud", target: "Charles Fernyhough", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "93", source: "Sabine Arnaud", target: "Daniel Margulies", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "94", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "95", source: "Felicity  Callard", target: "Daniel Margulies", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "96", source: "Charles Fernyhough", target: "Daniel Margulies", type: "Workshops_related", label: "Experimental Entanglements 2012"},
+  {idn: "97", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Workshops_related", label: "Entanglements Uni Birmingham 2013"},
+  {idn: "98", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Workshops_related", label: "Entanglements Goldsmiths College 2013"},
+  {idn: "99", source: "Jennifer Laws", target: "Angela Woods", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "100", source: "Jennifer Laws", target: "Michael Greaney", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "101", source: "Jennifer Laws", target: "Anna Katharina Schaffner", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "102", source: "Jennifer Laws", target: "Simon  Wessely", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "103", source: "Jennifer Laws", target: "Felicity  Callard", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "104", source: "Angela Woods", target: "Michael Greaney", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "105", source: "Angela Woods", target: "Anna Katharina Schaffner", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "106", source: "Angela Woods", target: "Simon  Wessely", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "107", source: "Angela Woods", target: "Felicity  Callard", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "108", source: "Michael Greaney", target: "Anna Katharina Schaffner", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "109", source: "Michael Greaney", target: "Simon  Wessely", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "110", source: "Michael Greaney", target: "Felicity  Callard", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "111", source: "Anna Katharina Schaffner", target: "Simon  Wessely", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "112", source: "Anna Katharina Schaffner", target: "Felicity  Callard", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "113", source: "Simon  Wessely", target: "Felicity  Callard", type: "Workshops_related", label: "Exhaustion 2013"},
+  {idn: "114", source: "Hilary Powell", target: "Angela Woods", type: "Workshops_related", label: "Hearing the Voice 2013"},
+  {idn: "115", source: "Hilary Powell", target: "Michael Greaney", type: "Workshops_related", label: "Hearing the Voice 2013"},
+  {idn: "116", source: "Angela Woods", target: "Michael Greaney", type: "Workshops_related", label: "Hearing the Voice 2013"},
+  {idn: "117", source: "Angela Woods", target: "Charles Fernyhough", type: "Workshops_related", label: "Hearing the Voice 2012"},
+  {idn: "118", source: "Jennifer Laws", target: "Angela Woods", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "119", source: "Jennifer Laws", target: "Paul Harrison", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "120", source: "Jennifer Laws", target: "Felicity  Callard", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "121", source: "Jennifer Laws", target: "Daniel Margulies", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "122", source: "Angela Woods", target: "Paul Harrison", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "123", source: "Angela Woods", target: "Felicity  Callard", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "124", source: "Angela Woods", target: "Daniel Margulies", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "125", source: "Paul Harrison", target: "Felicity  Callard", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "126", source: "Paul Harrison", target: "Daniel Margulies", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "127", source: "Felicity  Callard", target: "Daniel Margulies", type: "Workshops_related", label: "States of Rest 2013"},
+  {idn: "128", source: "Charles Fernyhough", target: "James Wilkes", type: "Workshops_related", label: "Interior Voices 2012"},
+  {idn: "129", source: "Hilary Powell", target: "Benjamin Alderson-Day", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "130", source: "Hilary Powell", target: "Vaughan Bell", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "131", source: "Hilary Powell", target: "Angela Woods", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "132", source: "Hilary Powell", target: "Felicity  Callard", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "133", source: "Hilary Powell", target: "Charles Fernyhough", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "134", source: "Benjamin Alderson-Day", target: "Vaughan Bell", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "135", source: "Benjamin Alderson-Day", target: "Angela Woods", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "136", source: "Benjamin Alderson-Day", target: "Felicity  Callard", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "137", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "138", source: "Vaughan Bell", target: "Angela Woods", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "139", source: "Vaughan Bell", target: "Felicity  Callard", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "140", source: "Vaughan Bell", target: "Charles Fernyhough", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "141", source: "Angela Woods", target: "Felicity  Callard", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "142", source: "Angela Woods", target: "Charles Fernyhough", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "143", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Workshops_related", label: "Hallucination 2013"},
+  {idn: "144", source: "Benjamin Alderson-Day", target: "Angela Woods", type: "Workshops_related", label: "Best Practice Psychosis March 2013"},
+  {idn: "145", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Workshops_related", label: "Best Practice Psychosis March 2013"},
+  {idn: "146", source: "Angela Woods", target: "Charles Fernyhough", type: "Workshops_related", label: "Best Practice Psychosis March 2013"},
+  {idn: "147", source: "Benjamin Alderson-Day", target: "Angela Woods", type: "Workshops_related", label: "Best Practice Psychosis June 2013"},
+  {idn: "148", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Workshops_related", label: "Best Practice Psychosis June 2013"},
+  {idn: "149", source: "Angela Woods", target: "Charles Fernyhough", type: "Workshops_related", label: "Best Practice Psychosis June 2013"},
+  {idn: "150", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Workshops_related", label: "British Psychological Society 2013"},
+  {idn: "151", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Workshops_related", label: "Denver 2012"},
+  {idn: "152", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Workshops_related", label: "Paper Goldsmiths College 2013"},
+  {idn: "153", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Workshops_related", label: "Paper Durham 2014"},
+  {idn: "154", source: "Angela Woods", target: "Lynne Friedli", type: "Workshops_related", label: "Critical Medical Humanities 2013"},
+  {idn: "155", source: "Angela Woods", target: "Felicity  Callard", type: "Workshops_related", label: "Critical Medical Humanities 2013"},
+  {idn: "156", source: "Lynne Friedli", target: "Felicity  Callard", type: "Workshops_related", label: "Critical Medical Humanities 2013"},
+  {idn: "157", source: "Angela Woods", target: "Felicity  Callard", type: "Workshops_related", label: "Association Medical Humanities 2012 "},
+  {idn: "158", source: "Simon  Wessely", target: "Felicity  Callard", type: "Workshops_related", label: "International DSM5 "},
+  {idn: "159", source: "Hilary Powell", target: "Benjamin Alderson-Day", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "160", source: "Hilary Powell", target: "Vaughan Bell", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "161", source: "Hilary Powell", target: "Angela Woods", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "162", source: "Hilary Powell", target: "Holly Pester", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "163", source: "Hilary Powell", target: "Felicity  Callard", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "164", source: "Hilary Powell", target: "Charles Fernyhough", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "165", source: "Benjamin Alderson-Day", target: "Vaughan Bell", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "166", source: "Benjamin Alderson-Day", target: "Angela Woods", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "167", source: "Benjamin Alderson-Day", target: "Holly Pester", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "168", source: "Benjamin Alderson-Day", target: "Felicity  Callard", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "169", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "170", source: "Vaughan Bell", target: "Angela Woods", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "171", source: "Vaughan Bell", target: "Holly Pester", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "172", source: "Vaughan Bell", target: "Felicity  Callard", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "173", source: "Vaughan Bell", target: "Charles Fernyhough", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "174", source: "Angela Woods", target: "Holly Pester", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "175", source: "Angela Woods", target: "Felicity  Callard", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "176", source: "Angela Woods", target: "Charles Fernyhough", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "177", source: "Holly Pester", target: "Felicity  Callard", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "178", source: "Holly Pester", target: "Charles Fernyhough", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "179", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Workshops_related", label: "Social Cognitive Neuroscience 2013"},
+  {idn: "180", source: "Sabine Arnaud", target: "Felicity  Callard", type: "Workshops_related", label: "Critical Neuroscience"},
+  {idn: "181", source: "Sabine Arnaud", target: "Daniel Margulies", type: "Workshops_related", label: "Critical Neuroscience"},
+  {idn: "182", source: "Felicity  Callard", target: "Daniel Margulies", type: "Workshops_related", label: "Critical Neuroscience"},
+  {idn: "183", source: "Jonny Smallwood", target: "Chris Gorgolewski", type: "Teaching", label: "Teaching York 2013"},
+  {idn: "184", source: "Jonny Smallwood", target: "Daniel Margulies", type: "Teaching", label: "Teaching York 2013"},
+  {idn: "185", source: "Chris Gorgolewski", target: "Daniel Margulies", type: "Teaching", label: "Teaching York 2013"},
+  {idn: "186", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Art_Residency", label: "Art Writing Residency"},
+  {idn: "187", source: "Steven Fowler", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Penned in the Margins"},
+  {idn: "188", source: "Steven Fowler", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Penned in the Margins"},
+  {idn: "189", source: "Patrick Coyle", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Penned in the Margins"},
+  {idn: "190", source: "Hilary Powell", target: "Charles Fernyhough", type: "Published_PoetryArts_Related", label: "Medieval Psychology the Psychologist"},
+  {idn: "191", source: "Steven Fowler", target: "Tamarin Norwood", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "192", source: "Steven Fowler", target: "Emma Bennett", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "193", source: "Steven Fowler", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "194", source: "Steven Fowler", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "195", source: "Tamarin Norwood", target: "Emma Bennett", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "196", source: "Tamarin Norwood", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "197", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "198", source: "Emma Bennett", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "199", source: "Emma Bennett", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "200", source: "Holly Pester", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Hamilton Edit"},
+  {idn: "201", source: "Steven Fowler", target: "Tamarin Norwood", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "202", source: "Steven Fowler", target: "Emma Bennett", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "203", source: "Steven Fowler", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "204", source: "Steven Fowler", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "205", source: "Tamarin Norwood", target: "Emma Bennett", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "206", source: "Tamarin Norwood", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "207", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "208", source: "Emma Bennett", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "209", source: "Emma Bennett", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "210", source: "Holly Pester", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Art Davenport Editted"},
+  {idn: "211", source: "Steven Fowler", target: "Tamarin Norwood", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "212", source: "Steven Fowler", target: "Emma Bennett", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "213", source: "Steven Fowler", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "214", source: "Steven Fowler", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "215", source: "Steven Fowler", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "216", source: "Tamarin Norwood", target: "Emma Bennett", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "217", source: "Tamarin Norwood", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "218", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "219", source: "Tamarin Norwood", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "220", source: "Emma Bennett", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "221", source: "Emma Bennett", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "222", source: "Emma Bennett", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "223", source: "Holly Pester", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "224", source: "Holly Pester", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "225", source: "Patrick Coyle", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Anthology Poetry Fowler Editted"},
+  {idn: "226", source: "Tamarin Norwood", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Anthology Poetry Wilkes Editted"},
+  {idn: "227", source: "Emma Bennett", target: "Antonia Barnett-McIntosh", type: "Published_PoetryArts_Related", label: "Theater Piece 2010"},
+  {idn: "228", source: "Rhett  Griffiths", target: "Charles Fernyhough", type: "Published_PoetryArts_Related", label: "Fernyhough & Griffiths ScreenPlay 2012"},
+  {idn: "229", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "2Publications BlackDog Publish"},
+  {idn: "230", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Published_PoetryArts_Related", label: "Roland Issue 7ICA Magazine"},
+  {idn: "231", source: "Christian Nold", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Special WorksSchool"},
+  {idn: "232", source: "Steven Fowler", target: "Tamarin Norwood", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "233", source: "Steven Fowler", target: "Emma Bennett", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "234", source: "Steven Fowler", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "235", source: "Steven Fowler", target: "Antonia Barnett-McIntosh", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "236", source: "Steven Fowler", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "237", source: "Tamarin Norwood", target: "Emma Bennett", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "238", source: "Tamarin Norwood", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "239", source: "Tamarin Norwood", target: "Antonia Barnett-McIntosh", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "240", source: "Tamarin Norwood", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "241", source: "Emma Bennett", target: "Holly Pester", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "242", source: "Emma Bennett", target: "Antonia Barnett-McIntosh", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "243", source: "Emma Bennett", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "244", source: "Holly Pester", target: "Antonia Barnett-McIntosh", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "245", source: "Holly Pester", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "246", source: "Antonia Barnett-McIntosh", target: "James Wilkes", type: "Published_PoetryArts_Related", label: "Herbarium Publication 2011"},
+  {idn: "247", source: "Steven Fowler", target: "Holly Pester", type: "Poetry_readings", label: "Camarade Series Mexico"},
+  {idn: "248", source: "Holly Pester", target: "Patrick Coyle", type: "Poetry_readings", label: "Malgras Naudet Gallery"},
+  {idn: "249", source: "Steven Fowler", target: "Tamarin Norwood", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "250", source: "Steven Fowler", target: "Emma Bennett", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "251", source: "Steven Fowler", target: "Holly Pester", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "252", source: "Steven Fowler", target: "Patrick Coyle", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "253", source: "Steven Fowler", target: "James Wilkes", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "254", source: "Tamarin Norwood", target: "Emma Bennett", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "255", source: "Tamarin Norwood", target: "Holly Pester", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "256", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "257", source: "Tamarin Norwood", target: "James Wilkes", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "258", source: "Emma Bennett", target: "Holly Pester", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "259", source: "Emma Bennett", target: "Patrick Coyle", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "260", source: "Emma Bennett", target: "James Wilkes", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "261", source: "Holly Pester", target: "Patrick Coyle", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "262", source: "Holly Pester", target: "James Wilkes", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "263", source: "Patrick Coyle", target: "James Wilkes", type: "Poetry_readings", label: "Camarade Event"},
+  {idn: "264", source: "Tamarin Norwood", target: "Holly Pester", type: "Public_events", label: "Zabludowicz Collection"},
+  {idn: "265", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Public_events", label: "Zabludowicz Collection"},
+  {idn: "266", source: "Tamarin Norwood", target: "James Wilkes", type: "Public_events", label: "Zabludowicz Collection"},
+  {idn: "267", source: "Holly Pester", target: "Patrick Coyle", type: "Public_events", label: "Zabludowicz Collection"},
+  {idn: "268", source: "Holly Pester", target: "James Wilkes", type: "Public_events", label: "Zabludowicz Collection"},
+  {idn: "269", source: "Patrick Coyle", target: "James Wilkes", type: "Public_events", label: "Zabludowicz Collection"},
+  {idn: "270", source: "Nina Garthwaite", target: "James Wilkes", type: "Public_events", label: "Dark Matter Manchester"},
+  {idn: "271", source: "Emma Bennett", target: "Antonia Barnett-McIntosh", type: "Public_events", label: "London Edinburgh Berlin Bristol"},
+  {idn: "272", source: "Steven Fowler", target: "Emma Bennett", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "273", source: "Steven Fowler", target: "Holly Pester", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "274", source: "Steven Fowler", target: "Antonia Barnett-McIntosh", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "275", source: "Steven Fowler", target: "James Wilkes", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "276", source: "Emma Bennett", target: "Holly Pester", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "277", source: "Emma Bennett", target: "Antonia Barnett-McIntosh", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "278", source: "Emma Bennett", target: "James Wilkes", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "279", source: "Holly Pester", target: "Antonia Barnett-McIntosh", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "280", source: "Holly Pester", target: "James Wilkes", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "281", source: "Antonia Barnett-McIntosh", target: "James Wilkes", type: "Public_events", label: "Liverpool Biennal"},
+  {idn: "282", source: "Emma Bennett", target: "James Wilkes", type: "Public_events", label: "Royal College Art"},
+  {idn: "283", source: "Holly Pester", target: "James Wilkes", type: "Public_events", label: "Ledbury Festival 2010"},
+  {idn: "284", source: "Angela Woods", target: "Felicity  Callard", type: "Public_events", label: "Lived Experience Research Network"},
+  {idn: "285", source: "Chris Gorgolewski", target: "Josh Berson", type: "Public_events", label: "Open Access"},
+  {idn: "286", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Public_events", label: "MPIB"},
+  {idn: "287", source: "Des Fitzgerald", target: "Charles Fernyhough", type: "Public_events", label: "MPIB"},
+  {idn: "288", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Public_events", label: "MPIB"},
+  {idn: "289", source: "Felicity  Callard", target: "Daniel Margulies", type: "Public_events", label: "Bibliometric"},
+  {idn: "290", source: "Lynne Friedli", target: "Felicity  Callard", type: "Public_events", label: "Scotish Wide Training 2004-2005"},
+  {idn: "291", source: "Chris Gorgolewski", target: "Tal Yarkoni", type: "Public_events", label: "NeuroVolt"},
+  {idn: "292", source: "Chris Gorgolewski", target: "Daniel Margulies", type: "Public_events", label: "NeuroVolt"},
+  {idn: "293", source: "Tal Yarkoni", target: "Daniel Margulies", type: "Public_events", label: "NeuroVolt"},
+  {idn: "294", source: "Robert Devcic", target: "Charles Fernyhough", type: "Public_events", label: "GV Art & Mind"},
+  {idn: "295", source: "Noah Hutton", target: "Daniel Margulies", type: "Public_events", label: "Gallery Exhibition HBM 2013"},
+  {idn: "296", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Public_events", label: "Ekphrasis Exhibition "},
+  {idn: "297", source: "Steven Fowler", target: "Emma Bennett", type: "Public_events", label: "3 Performances Enemies Project"},
+  {idn: "298", source: "Steven Fowler", target: "Holly Pester", type: "Public_events", label: "3 Performances Enemies Project"},
+  {idn: "299", source: "Emma Bennett", target: "Holly Pester", type: "Public_events", label: "3 Performances Enemies Project"},
+  {idn: "300", source: "Steven Fowler", target: "Emma Bennett", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "301", source: "Steven Fowler", target: "Holly Pester", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "302", source: "Steven Fowler", target: "Antonia Barnett-McIntosh", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "303", source: "Steven Fowler", target: "James Wilkes", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "304", source: "Emma Bennett", target: "Holly Pester", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "305", source: "Emma Bennett", target: "Antonia Barnett-McIntosh", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "306", source: "Emma Bennett", target: "James Wilkes", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "307", source: "Holly Pester", target: "Antonia Barnett-McIntosh", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "308", source: "Holly Pester", target: "James Wilkes", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "309", source: "Antonia Barnett-McIntosh", target: "James Wilkes", type: "Public_events", label: "Voiceworks 2009-2010"},
+  {idn: "310", source: "Vaughan Bell", target: "Simon  Wessely", type: "Public_events", label: "Radio 4 Programme"},
+  {idn: "311", source: "Vaughan Bell", target: "Charles Fernyhough", type: "Public_events", label: "Radio 4 Programme"},
+  {idn: "312", source: "Vaughan Bell", target: "Claudia  Hammond", type: "Public_events", label: "Radio 4 Programme"},
+  {idn: "313", source: "Simon  Wessely", target: "Charles Fernyhough", type: "Public_events", label: "Radio 4 Programme"},
+  {idn: "314", source: "Simon  Wessely", target: "Claudia  Hammond", type: "Public_events", label: "Radio 4 Programme"},
+  {idn: "315", source: "Charles Fernyhough", target: "Claudia  Hammond", type: "Public_events", label: "Radio 4 Programme"},
+  {idn: "316", source: "Charles Fernyhough", target: "Claudia  Hammond", type: "Public_events", label: "Edinburgh Book Festival 2012"},
+  {idn: "317", source: "Charles Fernyhough", target: "James Wilkes", type: "Public_events", label: "Public Conversations VOXLab"},
+  {idn: "318", source: "Holly Pester", target: "Nina Garthwaite", type: "Public_events", label: "the Voice Wellcome Collection"},
+  {idn: "319", source: "Holly Pester", target: "James Wilkes", type: "Public_events", label: "the Voice Wellcome Collection"},
+  {idn: "320", source: "Nina Garthwaite", target: "James Wilkes", type: "Public_events", label: "the Voice Wellcome Collection"},
+  {idn: "321", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Public_events", label: "Resonance 104.4FM"},
+  {idn: "322", source: "Jen Wong", target: "Louis Buckley", type: "Public_events", label: "James Interior Traces Project"},
+  {idn: "323", source: "Jen Wong", target: "James Wilkes", type: "Public_events", label: "James Interior Traces Project"},
+  {idn: "324", source: "Louis Buckley", target: "James Wilkes", type: "Public_events", label: "James Interior Traces Project"},
+  {idn: "325", source: "Noah Hutton", target: "Vaughan Bell", type: "Public_events", label: "Blog Posts Neuroscience Themed"},
+  {idn: "326", source: "Andrew Glester", target: "Charles Fernyhough", type: "Public_events", label: "Spaceship Imagination Cinema"},
+  {idn: "327", source: "Andrew Glester", target: "Charles Fernyhough", type: "Public_events", label: "Pop Up Latitude Festival"},
+  {idn: "328", source: "Emma Bennett", target: "Antonia Barnett-McIntosh", type: "Public_events", label: "Chisenhale Dance Space"},
+  {idn: "329", source: "Steven Fowler", target: "Patrick Coyle", type: "Public_events", label: "Art Gallery Bouncer"},
+  {idn: "330", source: "Steven Fowler", target: "Patrick Coyle", type: "Public_events", label: "Soho Curzon London"},
+  {idn: "331", source: "Christian Nold", target: "Lynne Friedli", type: "Public_events", label: "Evaluators Art Project"},
+  {idn: "332", source: "Christian Nold", target: "Felicity  Callard", type: "Public_events", label: "Evaluators Art Project"},
+  {idn: "333", source: "Lynne Friedli", target: "Felicity  Callard", type: "Public_events", label: "Evaluators Art Project"},
+  {idn: "334", source: "Felicity  Callard", target: "Claudia  Hammond", type: "Public_events", label: "Mental Health Arts Exhibition"},
+  {idn: "335", source: "Vaughan Bell", target: "Charles Fernyhough", type: "Public_events", label: "Cinema and Psychosis Event"},
+  {idn: "336", source: "Vaughan Bell", target: "Claudia  Hammond", type: "Public_events", label: "Brain Initiative BBC"},
+  {idn: "337", source: "Joceline Howe", target: "Charles Fernyhough", type: "Public_events", label: "Serpentine Gallery Centre for Possible Studies"},
+  {idn: "338", source: "Hilary Powell", target: "Benjamin Alderson-Day", type: "Grants", label: "Hearing the Voice "},
+  {idn: "339", source: "Hilary Powell", target: "Angela Woods", type: "Grants", label: "Hearing the Voice "},
+  {idn: "340", source: "Hilary Powell", target: "Felicity  Callard", type: "Grants", label: "Hearing the Voice "},
+  {idn: "341", source: "Hilary Powell", target: "Charles Fernyhough", type: "Grants", label: "Hearing the Voice "},
+  {idn: "342", source: "Benjamin Alderson-Day", target: "Angela Woods", type: "Grants", label: "Hearing the Voice "},
+  {idn: "343", source: "Benjamin Alderson-Day", target: "Felicity  Callard", type: "Grants", label: "Hearing the Voice "},
+  {idn: "344", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Grants", label: "Hearing the Voice "},
+  {idn: "345", source: "Angela Woods", target: "Felicity  Callard", type: "Grants", label: "Hearing the Voice "},
+  {idn: "346", source: "Angela Woods", target: "Charles Fernyhough", type: "Grants", label: "Hearing the Voice "},
+  {idn: "347", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Grants", label: "Hearing the Voice "},
+  {idn: "348", source: "Angela Woods", target: "Felicity  Callard", type: "Grants", label: "Brains in the Making "},
+  {idn: "349", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Grants", label: "Volkswagen Stiftung"},
+  {idn: "350", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Grants", label: "Research Council (in preparation)"},
+  {idn: "351", source: "Tamarin Norwood", target: "Emma Bennett", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "352", source: "Tamarin Norwood", target: "Holly Pester", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "353", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "354", source: "Tamarin Norwood", target: "James Wilkes", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "355", source: "Emma Bennett", target: "Holly Pester", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "356", source: "Emma Bennett", target: "Patrick Coyle", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "357", source: "Emma Bennett", target: "James Wilkes", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "358", source: "Holly Pester", target: "Patrick Coyle", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "359", source: "Holly Pester", target: "James Wilkes", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "360", source: "Patrick Coyle", target: "James Wilkes", type: "Grants", label: "Jerwood Charitable Foundation"},
+  {idn: "361", source: "Tamarin Norwood", target: "Emma Bennett", type: "Grants", label: "Arts Council"},
+  {idn: "362", source: "Tamarin Norwood", target: "Holly Pester", type: "Grants", label: "Arts Council"},
+  {idn: "363", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Grants", label: "Arts Council"},
+  {idn: "364", source: "Tamarin Norwood", target: "James Wilkes", type: "Grants", label: "Arts Council"},
+  {idn: "365", source: "Emma Bennett", target: "Holly Pester", type: "Grants", label: "Arts Council"},
+  {idn: "366", source: "Emma Bennett", target: "Patrick Coyle", type: "Grants", label: "Arts Council"},
+  {idn: "367", source: "Emma Bennett", target: "James Wilkes", type: "Grants", label: "Arts Council"},
+  {idn: "368", source: "Holly Pester", target: "Patrick Coyle", type: "Grants", label: "Arts Council"},
+  {idn: "369", source: "Holly Pester", target: "James Wilkes", type: "Grants", label: "Arts Council"},
+  {idn: "370", source: "Patrick Coyle", target: "James Wilkes", type: "Grants", label: "Arts Council"},
+  {idn: "371", source: "Angela Woods", target: "Felicity  Callard", type: "Grants", label: "Institute Advanced Study"},
+  {idn: "372", source: "Chris Gorgolewski", target: "Josh Berson", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "373", source: "Chris Gorgolewski", target: "Hannes Golchert", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "374", source: "Chris Gorgolewski", target: "Natacha Mendes", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "375", source: "Chris Gorgolewski", target: "Daniel Margulies", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "376", source: "Josh Berson", target: "Hannes Golchert", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "377", source: "Josh Berson", target: "Natacha Mendes", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "378", source: "Josh Berson", target: "Daniel Margulies", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "379", source: "Hannes Golchert", target: "Natacha Mendes", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "380", source: "Hannes Golchert", target: "Daniel Margulies", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "381", source: "Natacha Mendes", target: "Daniel Margulies", type: "Research_Group", label: "Neuroanatomy & Connectivity Group MPI"},
+  {idn: "382", source: "Jonny Smallwood", target: "Hannes Golchert", type: "Research_Group", label: "Social Neuroscience MPI"},
+  {idn: "383", source: "Jonny Smallwood", target: "Natacha Mendes", type: "Research_Group", label: "Social Neuroscience MPI"},
+  {idn: "384", source: "Hannes Golchert", target: "Natacha Mendes", type: "Research_Group", label: "Social Neuroscience MPI"},
+  {idn: "385", source: "Josh Berson", target: "Felicity  Callard", type: "Research_Group", label: "MPIWG Rationality"},
+  {idn: "386", source: "Sabine Arnaud", target: "Felicity  Callard", type: "Research_Group", label: "MPIWG 2011-2012"},
+  {idn: "387", source: "Hilary Powell", target: "Jennifer Laws", type: "Research_Group", label: "Centre Medical Humanities"},
+  {idn: "388", source: "Hilary Powell", target: "Angela Woods", type: "Research_Group", label: "Centre Medical Humanities"},
+  {idn: "389", source: "Hilary Powell", target: "Felicity  Callard", type: "Research_Group", label: "Centre Medical Humanities"},
+  {idn: "390", source: "Jennifer Laws", target: "Angela Woods", type: "Research_Group", label: "Centre Medical Humanities"},
+  {idn: "391", source: "Jennifer Laws", target: "Felicity  Callard", type: "Research_Group", label: "Centre Medical Humanities"},
+  {idn: "392", source: "Angela Woods", target: "Felicity  Callard", type: "Research_Group", label: "Centre Medical Humanities"},
+  {idn: "393", source: "Jennifer Laws", target: "Paul Harrison", type: "Research_Group", label: "Geography Durham"},
+  {idn: "394", source: "Jennifer Laws", target: "Felicity  Callard", type: "Research_Group", label: "Geography Durham"},
+  {idn: "395", source: "Paul Harrison", target: "Felicity  Callard", type: "Research_Group", label: "Geography Durham"},
+  {idn: "396", source: "Vaughan Bell", target: "Angela Woods", type: "Research_Group", label: "International Consortium Hallucinations Research"},
+  {idn: "397", source: "Vaughan Bell", target: "Felicity  Callard", type: "Research_Group", label: "International Consortium Hallucinations Research"},
+  {idn: "398", source: "Angela Woods", target: "Felicity  Callard", type: "Research_Group", label: "International Consortium Hallucinations Research"},
+  {idn: "399", source: "Vaughan Bell", target: "Simon  Wessely", type: "Research_Group", label: "Institute Psychiatry NHS"},
+  {idn: "400", source: "Vaughan Bell", target: "Felicity  Callard", type: "Research_Group", label: "Institute Psychiatry NHS"},
+  {idn: "401", source: "Simon  Wessely", target: "Felicity  Callard", type: "Research_Group", label: "Institute Psychiatry NHS"},
+  {idn: "402", source: "Des Fitzgerald", target: "Vaughan Bell", type: "Research_Group", label: "Institute Psychiatry Kings College"},
+  {idn: "403", source: "Des Fitzgerald", target: "Simon  Wessely", type: "Research_Group", label: "Institute Psychiatry Kings College"},
+  {idn: "404", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Research_Group", label: "Institute Psychiatry Kings College"},
+  {idn: "405", source: "Vaughan Bell", target: "Simon  Wessely", type: "Research_Group", label: "Institute Psychiatry Kings College"},
+  {idn: "406", source: "Vaughan Bell", target: "Felicity  Callard", type: "Research_Group", label: "Institute Psychiatry Kings College"},
+  {idn: "407", source: "Simon  Wessely", target: "Felicity  Callard", type: "Research_Group", label: "Institute Psychiatry Kings College"},
+  {idn: "408", source: "Simon  Wessely", target: "Felicity  Callard", type: "Research_Group", label: " Governance Frameworks Mental Health Database"},
+  {idn: "409", source: "Sabine Arnaud", target: "Daniel Margulies", type: "Research_Group", label: "MPI Directors Retreat 2011"},
+  {idn: "410", source: "Sabine Arnaud", target: "Daniel Margulies", type: "Research_Group", label: "MPI Directors Retreat 2013"},
+  {idn: "411", source: "Des Fitzgerald", target: "Felicity  Callard", type: "Research_Group", label: "European Neuroscience Society Network"},
+  {idn: "412", source: "Steven Fowler", target: "Tamarin Norwood", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "413", source: "Steven Fowler", target: "Emma Bennett", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "414", source: "Steven Fowler", target: "Holly Pester", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "415", source: "Steven Fowler", target: "Patrick Coyle", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "416", source: "Steven Fowler", target: "James Wilkes", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "417", source: "Tamarin Norwood", target: "Emma Bennett", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "418", source: "Tamarin Norwood", target: "Holly Pester", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "419", source: "Tamarin Norwood", target: "Patrick Coyle", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "420", source: "Tamarin Norwood", target: "James Wilkes", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "421", source: "Emma Bennett", target: "Holly Pester", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "422", source: "Emma Bennett", target: "Patrick Coyle", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "423", source: "Emma Bennett", target: "James Wilkes", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "424", source: "Holly Pester", target: "Patrick Coyle", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "425", source: "Holly Pester", target: "James Wilkes", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "426", source: "Patrick Coyle", target: "James Wilkes", type: "Research_Group", label: "Contemporary Poetics Research Centre (Birkbeck College)"},
+  {idn: "427", source: "Hilary Powell", target: "Benjamin Alderson-Day", type: "Reading_Group", label: "Medieval Psych Reading Group"},
+  {idn: "428", source: "Hilary Powell", target: "Felicity  Callard", type: "Reading_Group", label: "Medieval Psych Reading Group"},
+  {idn: "429", source: "Hilary Powell", target: "Charles Fernyhough", type: "Reading_Group", label: "Medieval Psych Reading Group"},
+  {idn: "430", source: "Benjamin Alderson-Day", target: "Felicity  Callard", type: "Reading_Group", label: "Medieval Psych Reading Group"},
+  {idn: "431", source: "Benjamin Alderson-Day", target: "Charles Fernyhough", type: "Reading_Group", label: "Medieval Psych Reading Group"},
+  {idn: "432", source: "Felicity  Callard", target: "Charles Fernyhough", type: "Reading_Group", label: "Medieval Psych Reading Group"}];
+// NAMES:
+var names = [{idn: "433", name: "Des Fitzgerald", field: "Sociologist", institution: "Kings College London "}, 
+  {idn: "434", name: "Noah Hutton", field: "Film Maker ", institution: "Freelance"}, 
+  {idn: "435", name: "Hilary Powell", field: "Medieval Historian", institution: "Durham University"}, 
+  {idn: "436", name: "Benjamin Alderson-Day", field: "Psychologist", institution: "Durham University"}, 
+  {idn: "437", name: "Jennifer Laws", field: "Geographer & Medical Humanities Scholar", institution: "Durham University"}, 
+  {idn: "438", name: "Vaughan Bell", field: "Clinical Psychologist", institution: "Kings College London, Institute of Psychiatry"}, 
+  {idn: "439", name: "Jen Wong", field: "Science/Arts Public Engagement Expert", institution: "Guerilla Science"}, 
+  {idn: "440", name: "Louis Buckley", field: "Science/Arts Public Engagement Expert", institution: "Guerilla Science"}, 
+  {idn: "441", name: "Jonny Smallwood", field: "Psychologist", institution: "University of York"}, 
+  {idn: "442", name: "Angela Woods", field: "Medical Humanities & Cultural Studies Scholar", institution: "Durham University"}, 
+  {idn: "443", name: "Steven Fowler", field: "Poet", institution: "Freelance"}, 
+  {idn: "444", name: "Tamarin Norwood", field: "Artist & Poet", institution: "Freelance"}, 
+  {idn: "445", name: "Emma Bennett", field: "Poet", institution: "Freelance"}, 
+  {idn: "446", name: "Holly Pester", field: "Poet", institution: "Freelance"}, 
+  {idn: "447", name: "Patrick Coyle", field: "Poet", institution: "Freelance"}, 
+  {idn: "448", name: "Antonia Barnett-McIntosh", field: "Composer", institution: "Freelance"}, 
+  {idn: "449", name: "Paul Harrison", field: "Geographer ", institution: "Durham University"}, 
+  {idn: "450", name: "Michael Greaney", field: "Scholar of English Literature & Theory", institution: "Lancaster University"}, 
+  {idn: "451", name: "Anna Katharina Schaffner", field: "Comparative Literature Scholar", institution: "University of Kent"}, 
+  {idn: "452", name: "Simon  Wessely", field: "Psychiatrist", institution: "Kings College London, Institute of Psychiatry"}, 
+  {idn: "453", name: "Rhett  Griffiths", field: "Spatial & Experience Design and Facilitator", institution: "Freelance"}, 
+  {idn: "454", name: "Chris Gorgolewski", field: "Neuroscientist & Neuroinformatician", institution: "Max Planck Institute for Human Cognitive and Brain Sciences"}, 
+  {idn: "455", name: "Josh Berson", field: "Cognitive Anthropologist & Historian of Anthropology", institution: "Max Planck Institute for Human Cognitive and Brain Sciences"}, 
+  {idn: "456", name: "Tal Yarkoni", field: "Psychoinformatician", institution: "University of Texas at Austin"}, 
+  {idn: "457", name: "Nina Garthwaite", field: "Documentary Film Maker & Radio Producer", institution: "In the Dark Radio"}, 
+  {idn: "458", name: "Sabine Arnaud", field: "Historian of 17th20th Century Medicine & of Knowledge", institution: "Max Planck Institute for the History of Science"}, 
+  {idn: "459", name: "Andrew Glester", field: "Producer, Director, Artist and Film Maker", institution: "Sound of Science Ltd"}, 
+  {idn: "460", name: "Christian Nold", field: "Artist, Designer & Educator", institution: "Freelance"}, 
+  {idn: "461", name: "Joceline Howe", field: "Educator, Artist", institution: "Freelancer"}, 
+  {idn: "462", name: "Robert Devcic", field: "Curator & Gallery Director", institution: "GV Art"}, 
+  {idn: "463", name: "Lynne Friedli", field: "Public mental health expert", institution: "Freelance"}, 
+  {idn: "464", name: "Hannes Golchert", field: "Psychologist", institution: "Max Planck Institute for Human Cognitive and Brain Sciences"}, 
+  {idn: "465", name: "Natacha Mendes", field: "Biologist/Comparative Psychology", institution: "Max Planck Institute for Human Cognitive and Brain Sciences"}, 
+  {idn: "466", name: "Felicity  Callard", field: "geography / medical humanities /history of science", institution: "Durham University"}, 
+  {idn: "467", name: "Charles Fernyhough", field: "Psychologist & Writer", institution: "Durham University"}, 
+  {idn: "468", name: "Claudia  Hammond", field: "Broadcaster & Writer", institution: "Freelance"}, 
+  {idn: "469", name: "Daniel Margulies", field: "Neuroscientist & Artist", institution: "Max Planck Institute for Human Cognitive & Brain Sciences"}, 
+  {idn: "470", name: "James Wilkes", field: "Poet & Literary Studies Scholar", institution: "Freelance"}];
+
+
+//sort links by source, then target
+links.sort(function(a,b) {
+    if (a.source > b.source) {return 1;}
+    else if (a.source < b.source) {return -1;}
+    else {
+        if (a.target > b.target) {return 1;}
+        if (a.target < b.target) {return -1;}
+        else {return 0;}
+    }
+});
+//any links with duplicate source and target get an incremented 'linknum'
+for (var i=0; i<links.length; i++) {
+    if ((i != 0 &&
+        links[i].source == links[i-1].source &&
+        links[i].target == links[i-1].target) ||
+       (i != 0 &&
+        links[i].target == links[i-1].source &&
+        links[i].source == links[i-1].target)) {
+            links[i].linknum = links[i-1].linknum + 1;
+        }
+    else {links[i].linknum = 1;};
+};
+var nodes = {};
+// Compute the distinct nodes from the links.
+links.forEach(function(link) {
+  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+});
+
+//names.forEach(function(info) {
+ // (nodes[info.name] = {field: info.field});
+ // (nodes[info.name] = {institution: info.institution});
+ //});
+
+
+
+var w = 1400,
+    h = 900;
+
+var force = d3.layout.force()
+    .nodes(d3.values(nodes))
+    .links(links)
+    .size([w, h])
+    .linkDistance(300)
+    .charge(-1500)
+    .on("tick", tick)
+    .start();
+
+var drag = force.drag()
+    .on("dragstart", dragstart);
+				
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+// Per-type markers, as they don't inherit styles.
+svg.append("svg:defs").selectAll("marker")
+    .data(["Scientific_Papers", "Grants", "Reading_Group", "Workshops_related", "Teaching", "Public_events", "Art_Residency", "Published_PoetryArts_Related", "Collaborations", "Poetry_readings", "Research_Group"])
+  .enter().append("svg:marker")
+    .attr("id", String)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 15)
+    .attr("refY", -1.5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+  .append("svg:path")
+    .attr("d", "M0,-5L10,0L0,5");
+
+    var link = svg.append("svg:g").selectAll("g.link")
+        .data(force.links())
+      .enter().append('g')
+        .attr('class', 'link');
+   
+    var linkPath = link.append("svg:path")
+        .attr("class", function(d) { return "link " + d.type; });
+   
+    var textPath = link.append("svg:path")
+        .attr("id", function(d) { return d.idn; })
+        .attr("class", "textpath");
+
+var circle = svg.append("svg:g").selectAll("circle")
+    .data(force.nodes())
+  .enter().append("svg:circle")
+    .attr("r", 6)
+    .call(force.drag)
+	.on("mouseover", nodeMouseOver)
+		.on("mouseout", nodeMouseOut);
+
+var text = svg.append("svg:g").selectAll("g")
+    .data(force.nodes())
+  .enter().append("svg:g");
+	
+// A copy of the text with a thick white stroke for legibility.
+text.append("svg:text")
+    .attr("x", 8)
+    .attr("y", ".31em")
+    .attr("class", "shadow")
+    .text(function(d) { return d.name; });
+
+text.append("svg:text")
+    .attr("x", 8)
+    .attr("y", ".31em")
+    .text(function(d) { return d.name; });
+
+//text.append("svg:text")
+//    .attr("x", 10)
+//    .attr("y", "1.91em")
+//		.attr("class", "shadow")
+//		.style("font-size", "10px")
+//    .text(function(d) { return d.field; });
+
+//text.append("svg:text")
+//    .attr("x", 10)
+//   .attr("y", "1.91em")
+//    .text(function(d) { return d.field; });
+
+var path_label = svg.append("svg:g").selectAll(".path_label")
+    .data(force.links())
+  .enter().append("svg:text")
+    .attr("class", "path_label")
+    .append("svg:textPath")
+      .attr("startOffset", "50%")
+      .attr("text-anchor", "middle")
+      .attr("xlink:href", function(d) { 
+          return "#" + d.idn; 
+      })
+      .style("fill", "#000")
+      .style("font-family", "Arial")
+      .style("font-size", "8px")
+      .text(function(d) { return d.label; });
+
+    function arcPath(leftHand, d) {
+        var start = leftHand ? d.source : d.target,
+            end = leftHand ? d.target : d.source,
+            dx = end.x - start.x,
+            dy = end.y - start.y,
+            dr = Math.sqrt(dx * dx + dy * dy)* 5 / d.linknum ,
+            sweep = leftHand ? 0 : 1;
+        return "M" + start.x + "," + start.y + "A" + dr + "," + dr + " 0 0," + sweep + " " + end.x + "," + end.y;
+    }
+
+// Use elliptical arc path segments to doubly-encode directionality.
+function tick() {
+	if(textPathShow){
+	  textPath.attr("d", function(d) {
+	    return arcPath(d.source.x < d.target.x, d);
+	  });		
+	}
+   
+  linkPath.attr("d", function(d) {
+    return arcPath(false, d);
+  });
+
+  circle.attr("transform", function(d) {
+    return "translate(" + d.x + "," + d.y + ")";
+  });
+
+  text.attr("transform", function(d) {
+    return "translate(" + d.x + "," + d.y + ")";
+  });
+}
+
+function dragstart(d) {
+  d.fixed = true;
+  d3.select(this).classed("fixed", true);
+}
+  
+//function toggleLinks(){
+//	console.log("toggled");
+//	textPathShow = !textPathShow;
+//}
+
+function nodeMouseOver(d) {
+  svg.selectAll(".path_label")
+		.classed("active", function(p) { 
+			return p.source === d || p.target === d; 
+		});
+}
+
+function nodeMouseOut(d) {
+	svg.selectAll(".path_label")
+		.classed("active", false);
+}
+// Would be put at top for button: 
+// <button id="toggletag" onClick="javascript:toggleLinks()"> Toggle link text </button> 
+	 </script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1px;
+}
+path.textpath {
+    fill: none;
+    stroke: none;
+}
+
+marker#Scientific_Papers { fill: red; }
+path.link.Scientific_Papers { stroke: red; }
+
+marker#Grants { fill: green; }
+path.link.Grants { stroke: green; }
+
+marker#Reading_Group { fill: blue; }
+path.link.Reading_Group { stroke: blue; }
+
+marker#Workshops_related { fill: purple; }
+path.link.Workshops_related { stroke: purple; }
+
+marker#Teaching { fill: aqua; }
+path.link.Teaching { stroke: aqua; }
+
+marker#Public_events { fill: CadetBlue; }
+path.link.Public_events { stroke: CadetBlue; }
+
+marker#Art_Residency { fill: DarkSlateBlue; }
+path.link.Art_Residency { stroke: DarkSlateBlue; }
+
+marker#Published_PoetryArts_Related { fill: DeepPink; }
+path.link.Published_PoetryArts_Related { stroke: DeepPink; }
+
+marker#Collaborations { fill: GreenYellow; }
+path.link.Collaborations { stroke: GreenYellow; }
+
+marker#Poetry_readings { fill: LightBlue; }
+path.link.Poetry_readings { stroke: LightBlue; }
+
+marker#Research_Group { fill: LightSeaGreen; }
+path.link.Research_Group { stroke: LightSeaGreen; }
+
+circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 2px;
+}
+
+text {
+  font: 15px sans-serif;
+  pointer-events: none;
+}
+
+
+text.shadow {
+  stroke: #fff;
+  stroke-width: 4px;
+  stroke-opacity: .9;
+}
+
+.path_label {
+display: none;
+text-rendering: optimizeSpeed ;
+}
+
+.path_label.active {
+display: block;
+}
+
